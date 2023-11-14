@@ -3,65 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-const people = [
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		department: 'Optimization',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-		image:
-			'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-	},
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		department: 'Optimization',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-		image:
-			'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-	},
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		department: 'Optimization',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-		image:
-			'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-	},
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		department: 'Optimization',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-		image:
-			'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-	},
-	{
-		name: 'Lindsay Walton',
-		title: 'Front-end Developer',
-		department: 'Optimization',
-		email: 'lindsay.walton@example.com',
-		role: 'Member',
-		image:
-			'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-	},
-	// More people...
-]
-
-// async function getData() {
-// 	axios
-// 		.get('http://localhost:3000/api/student/')
-// 		.then((res) => {
-// 			return res.data
-// 		})
-// 		.catch((error) => {
-// 			console.error(error)
-// 		})
-// }
 
 export default function Example() {
 	const [data, setData] = useState(null)
@@ -79,12 +20,15 @@ export default function Example() {
 
 	if (isLoading)
 		return (
-			<div class="grid h-screen place-items-center">
-				<img
-					className="h-14 w-auto"
-					src="https://d2ordbtgj864gn.cloudfront.net/assets/frontend/images/logo/skillsconnect-logo.webp"
-					alt="home"
-				/>
+			<div className="grid h-screen place-items-center ">
+				<div>
+					<h2 className="text-2xl text-center mb-4">Loading...</h2>
+					<img
+						className="h-14 w-auto"
+						src="https://d2ordbtgj864gn.cloudfront.net/assets/frontend/images/logo/skillsconnect-logo.webp"
+						alt="home"
+					/>
+				</div>
 			</div>
 		)
 	if (!data) return <p>No profile data</p>
@@ -150,14 +94,14 @@ export default function Example() {
 							</thead>
 							<tbody className="divide-y divide-gray-200 bg-white">
 								{data.map((person) => (
-									<tr key={person.email}>
+									<tr key={person.date}>
 										<td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
 											<div className="flex items-center">
 												<div className="h-11 w-11 flex-shrink-0">
 													<img
 														className="h-11 w-11 rounded-full"
 														src="https://avatars.githubusercontent.com/u/55863239?v=4"
-														alt={person.name}
+														alt={person.firstname}
 													/>
 													{/* <Image
 														src={person.image}
@@ -168,8 +112,8 @@ export default function Example() {
 												</div>
 												<div className="ml-4">
 													<div className="font-medium text-gray-900 capitalize">
-														{person.first_name} &nbsp;
-														{person.last_name}
+														{person.firstname} &nbsp;
+														{person.lastname}
 													</div>
 													<div className="mt-1 text-gray-500">
 														{person.email}
@@ -179,11 +123,11 @@ export default function Example() {
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
 											<div className="text-gray-900">
-												{person.phone}{' '}
+												{person.phoneno}
 												{person.whatsup && (
 													<span
 														title="Avaible on Whatsup"
-														className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+														className="ml-2 inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
 													>
 														W
 													</span>
@@ -198,10 +142,10 @@ export default function Example() {
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 ">
 											<div className="text-gray-900">
-												{person.country} &nbsp; {person.state}{' '}
+												{person.country?.label} &nbsp; {person.state}{' '}
 											</div>
 											<div className="mt-1 text-gray-500">
-												{person.city} {person.pincode}
+												{person.city?.label} {person.pincode}
 											</div>
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 ">
@@ -217,9 +161,15 @@ export default function Example() {
 										<td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
 											<Link
 												href="#"
-												className="text-indigo-600 hover:text-indigo-900"
+												className="text-[#c03e8e] hover:text-[#c03e8e]"
 											>
 												Edit
+											</Link>{' '}
+											<Link
+												href="#"
+												className="text-red-500 hover:text-red-600"
+											>
+												Delete
 											</Link>
 										</td>
 									</tr>

@@ -4,7 +4,7 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 const navigation = [
-	{ name: 'Home', href: '#' },
+	{ name: 'Home', href: '/' },
 	{ name: 'About', href: '#' },
 	{ name: 'Blogs', href: '#' },
 	{ name: 'Webinar', href: '#' },
@@ -20,16 +20,16 @@ export default function Example() {
 				aria-label="Global"
 			>
 				<div className="flex lg:flex-1">
-					<a href="#" className="-m-1.5 p-1.5">
-						<span className="sr-only">Your Company</span>
-						<Link href="">
+					<div href="#" className="-m-1.5 p-1.5">
+						<span className="sr-only">SkillConnect</span>
+						<Link href="/">
 							<img
-								className="h-8 w-auto"
+								className="h-8 w-auto cursor-pointer"
 								src="https://d2ordbtgj864gn.cloudfront.net/assets/frontend/images/logo/skillsconnect-logo.webp"
 								alt="home"
 							/>
 						</Link>
-					</a>
+					</div>
 				</div>
 				<div className="flex lg:hidden">
 					<button
@@ -43,13 +43,13 @@ export default function Example() {
 				</div>
 				<div className="hidden lg:flex lg:gap-x-12">
 					{navigation.map((item) => (
-						<a
+						<Link
 							key={item.name}
 							href={item.href}
 							className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer"
 						>
 							{item.name}
-						</a>
+						</Link>
 					))}
 				</div>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -70,14 +70,14 @@ export default function Example() {
 				<div className="fixed inset-0 z-10" />
 				<Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
 					<div className="flex items-center justify-between">
-						<a href="#" className="-m-1.5 p-1.5">
-							<span className="sr-only">Your Company</span>
+						<Link href="#" className="-m-1.5 p-1.5">
+							<span className="sr-only">SkillConnect</span>
 							<img
 								className="h-8 w-auto"
 								src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
 								alt=""
 							/>
-						</a>
+						</Link>
 						<button
 							type="button"
 							className="-m-2.5 rounded-md p-2.5 text-gray-700"
@@ -91,22 +91,22 @@ export default function Example() {
 						<div className="-my-6 divide-y divide-gray-500/10">
 							<div className="space-y-2 py-6">
 								{navigation.map((item) => (
-									<a
+									<Link
 										key={item.name}
 										href={item.href}
 										className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 cursor-pointer"
 									>
 										{item.name}
-									</a>
+									</Link>
 								))}
 							</div>
 							<div className="py-6">
-								<a
-									href="#"
-									className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								<Link
+									href="/registration"
+									className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 cursor-pointer"
 								>
 									Register
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>

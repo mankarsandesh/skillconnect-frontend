@@ -1,15 +1,14 @@
 import connectMongoDB from '@/libs/mongodb'
 import Student from '@/models/student'
 import { NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs'
 
 // Student Registeration API
 export async function POST(request) {
 	const {
-		first_name,
-		last_name,
+		firstname,
+		lastname,
 		email,
-		phone,
+		phoneno,
 		whatsup,
 		password,
 		gender,
@@ -20,11 +19,18 @@ export async function POST(request) {
 		dateofbirth,
 		job_location,
 		education_details,
+		institute_name,
+		course_type,
+		course_name,
+		specialization,
+		grading_system,
+		marks_grade,
+		year_of_passing,
 		upload_cv,
 	} = await request.json()
 	await connectMongoDB()
 	const findStudentEmail = await Student.findOne({ email: email })
-	const findStudentPhone = await Student.findOne({ phone: phone })
+	const findStudentPhone = await Student.findOne({ phoneno: phoneno })
 	if (findStudentEmail) {
 		return NextResponse.json(
 			{ message: 'Email id  already exists' },
@@ -39,10 +45,10 @@ export async function POST(request) {
 	}
 	// console.log(findStudent, 'find')
 	await Student.create({
-		first_name,
-		last_name,
+		firstname,
+		lastname,
 		email,
-		phone,
+		phoneno,
 		whatsup,
 		password,
 		gender,
@@ -53,11 +59,18 @@ export async function POST(request) {
 		dateofbirth,
 		job_location,
 		education_details,
+		institute_name,
+		course_type,
+		course_name,
+		specialization,
+		grading_system,
+		marks_grade,
+		year_of_passing,
 		upload_cv,
 	})
 	return NextResponse.json(
 		{ message: 'Create Account Succsfully' },
-		{ status: 201 }
+		{ status: 200 }
 	)
 }
 
@@ -65,6 +78,7 @@ export async function POST(request) {
 export async function GET() {
 	await connectMongoDB()
 	const StudentData = await Student.find()
+	console.log(StudentData, 'StudentData')
 	return NextResponse.json({ StudentData })
 }
 

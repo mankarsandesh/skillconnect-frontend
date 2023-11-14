@@ -1,11 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { ChevronDownIcon, PhotoIcon, EyeIcon } from '@heroicons/react/20/solid'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
+import { useRouter } from 'next/navigation'
 import { Switch } from '@headlessui/react'
 function classNames(...classes) {
 	return classes.filter(Boolean).join(' ')
@@ -76,12 +76,12 @@ const schema = Yup.object().shape({
 	i_agree: Yup.string().label('I Agree').required(),
 })
 const defaultValues = {
-	firstname: '',
-	lastname: '',
-	email: '',
-	phoneno: '',
-	password: '',
-	gender: '',
+	firstname: 'Tushar',
+	lastname: 'Hadawale',
+	email: 'tushar@skillconect.com  ',
+	phoneno: '7397273972',
+	password: 'tushar',
+	gender: 'Male',
 	country: '',
 	cities: '',
 	state: '',
@@ -110,24 +110,49 @@ export default function StudentForm() {
 		resolver: yupResolver(schema),
 	})
 	const methods = useForm()
-
+	const router = useRouter()
 	const [agreed, setAgreed] = useState(false)
 	const [mobileWhatsup, setMobileWhatsup] = useState(false)
 	const [page, setPage] = useState(1)
 	const [passVisible, setPassVisible] = useState(false)
 	const [uploadedPhotos, setUploadedPhotos] = useState([])
+	const [data, setData] = useState(null)
+	const [isLoading, setLoading] = useState(false)
 
 	const onSubmit = (data) => {
-		console.log(data)
+		setLoading(true)
+		console.log(data, 'data')
 		if (!agreed) {
 			return 'Please check Privacy policy and Terms conditions'
 		}
-		console.log(JSON.stringify(data))
-		const student = {
-			first_name: data.firstname,
-		}
-		console.log(JSON.stringify(student))
+		var newData = { whatsup: mobileWhatsup }
+		Object.assign(data, newData)
+		console.log(data, 'data2')
+
+		// const JsonStudent = JSON.stringify(data)
+		// const StudentData
+		fetch('/api/student/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data, 'student data')
+				// router.push('/')
+			})
+		setLoading(false)
 	}
+	// var storage = multer.diskStorage({
+	// 	destination: function (req, file, cb) {
+	// 		cb(null, 'uploads')
+	// 	},
+	// 	filename: function (req, file, cb) {
+	// 		cb(null, file.fieldname + '-' + Date.now())
+	// 	},
+	// })
 	const handleUpload = (e) => {
 		console.log(typeof e.target.files)
 		const files = e.target.files[0]
@@ -142,6 +167,21 @@ export default function StudentForm() {
 		// )
 		console.log(files)
 	}
+
+	function registerStudent() {
+		fetch('/api/student/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setData(data.StudentData)
+				setLoading(false)
+			})
+	}
+
 	return (
 		<form
 			action="#"
@@ -206,8 +246,8 @@ export default function StudentForm() {
 							</div>
 							<input
 								type="tel"
-								name="phone_no"
-								id="phone_no"
+								name="phoneno"
+								id="phoneno"
 								autoComplete="tel"
 								className="block w-full rounded-md border-0 px-3.5 py-2 pl-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 								{...register('phoneno')}
@@ -632,10 +672,11 @@ export default function StudentForm() {
 
 			<div className="mt-10 flex gap-3">
 				<button
+					disabled={isLoading}
 					type="submit"
 					className="block w-full rounded-md bg-[#c03e8e] px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#c03e8e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c03e8e]"
 				>
-					Submit Form
+					{isLoading ? 'Loading...' : 'Submit Form'}
 				</button>
 			</div>
 		</form>

@@ -13,7 +13,6 @@ export default function RootLayout({ children }) {
 		<html lang="en">
 			<body className={inter.className}>
 				<Header />
-
 				<div className=" bg-white">
 					<main>
 						<div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{children}</div>
