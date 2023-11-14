@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.2",
     "@refinedev/react-hook-form": "^4.8.12",
+    "axios": "^1.6.1",
     "bcryptjs": "^2.4.3",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",

@@ -64,8 +64,8 @@ export async function POST(request) {
 // Fetch Student Details API
 export async function GET() {
 	await connectMongoDB()
-	const Student = await Student.find()
-	return NextResponse.json({ Student })
+	const StudentData = await Student.find()
+	return NextResponse.json({ StudentData })
 }
 
 // Delete Student Details API

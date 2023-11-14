@@ -1,6 +1,8 @@
+'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 const people = [
 	{
 		name: 'Lindsay Walton',
@@ -50,7 +52,42 @@ const people = [
 	// More people...
 ]
 
+// async function getData() {
+// 	axios
+// 		.get('http://localhost:3000/api/student/')
+// 		.then((res) => {
+// 			return res.data
+// 		})
+// 		.catch((error) => {
+// 			console.error(error)
+// 		})
+// }
+
 export default function Example() {
+	const [data, setData] = useState(null)
+	const [isLoading, setLoading] = useState(true)
+
+	useEffect(() => {
+		fetch('/api/student/')
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data, 'sandesh')
+				setData(data.StudentData)
+				setLoading(false)
+			})
+	}, [])
+
+	if (isLoading)
+		return (
+			<div class="grid h-screen place-items-center">
+				<img
+					className="h-14 w-auto"
+					src="https://d2ordbtgj864gn.cloudfront.net/assets/frontend/images/logo/skillsconnect-logo.webp"
+					alt="home"
+				/>
+			</div>
+		)
+	if (!data) return <p>No profile data</p>
 	return (
 		<div className="px-4 sm:px-6 lg:px-8 bg-white p-10 ">
 			<div className="sm:flex sm:items-center">
@@ -80,19 +117,31 @@ export default function Example() {
 										scope="col"
 										className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 									>
-										Title
+										Phone
 									</th>
 									<th
 										scope="col"
 										className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 									>
-										Status
+										Job Location
 									</th>
 									<th
 										scope="col"
 										className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 									>
-										Role
+										Date
+									</th>
+									<th
+										scope="col"
+										className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+									>
+										Address
+									</th>
+									<th
+										scope="col"
+										className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+									>
+										Resume
 									</th>
 									<th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
 										<span className="sr-only">Edit</span>
@@ -100,14 +149,14 @@ export default function Example() {
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-gray-200 bg-white">
-								{people.map((person) => (
+								{data.map((person) => (
 									<tr key={person.email}>
 										<td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
 											<div className="flex items-center">
 												<div className="h-11 w-11 flex-shrink-0">
 													<img
 														className="h-11 w-11 rounded-full"
-														src={person.image}
+														src="https://avatars.githubusercontent.com/u/55863239?v=4"
 														alt={person.name}
 													/>
 													{/* <Image
@@ -118,8 +167,9 @@ export default function Example() {
 													/> */}
 												</div>
 												<div className="ml-4">
-													<div className="font-medium text-gray-900">
-														{person.name}
+													<div className="font-medium text-gray-900 capitalize">
+														{person.first_name} &nbsp;
+														{person.last_name}
 													</div>
 													<div className="mt-1 text-gray-500">
 														{person.email}
@@ -128,18 +178,41 @@ export default function Example() {
 											</div>
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-											<div className="text-gray-900">{person.title}</div>
-											<div className="mt-1 text-gray-500">
-												{person.department}
+											<div className="text-gray-900">
+												{person.phone}{' '}
+												{person.whatsup && (
+													<span
+														title="Avaible on Whatsup"
+														className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+													>
+														W
+													</span>
+												)}
 											</div>
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-											<span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-												Active
-											</span>
+											<div className="text-gray-900">{person.job_location}</div>
 										</td>
 										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-											{person.role}
+											{person.updatedAt}
+										</td>
+										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 ">
+											<div className="text-gray-900">
+												{person.country} &nbsp; {person.state}{' '}
+											</div>
+											<div className="mt-1 text-gray-500">
+												{person.city} {person.pincode}
+											</div>
+										</td>
+										<td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 ">
+											<div className="text-gray-900">
+												<Link
+													href="#"
+													className="text-indigo-600 hover:text-indigo-900"
+												>
+													Download CV
+												</Link>
+											</div>
 										</td>
 										<td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
 											<Link
