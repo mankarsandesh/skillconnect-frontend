@@ -34,7 +34,7 @@ export async function POST(request) {
 	if (findStudentEmail) {
 		return NextResponse.json(
 			{ message: 'Email id  already exists' },
-			{ status: 201 }
+			{ code: 201 }
 		)
 	}
 	if (findStudentPhone) {
@@ -68,24 +68,20 @@ export async function POST(request) {
 		year_of_passing,
 		upload_cv,
 	})
-	return NextResponse.json(
-		{ message: 'Create Account Succsfully' },
-		{ status: 200 }
-	)
+	return NextResponse.json({ message: 'success' }, { status: 200 })
 }
 
 // Fetch Student Details API
 export async function GET() {
 	await connectMongoDB()
 	const StudentData = await Student.find()
-	console.log(StudentData, 'StudentData')
-	return NextResponse.json({ StudentData })
+	return NextResponse.json({ StudentData }, { status: 200 })
 }
 
 // Delete Student Details API
 export async function DELETE(request) {
 	const id = request.nextUrl.searchParams.get('id')
 	await connectMongoDB()
-	await Topic.findByIdAndDelete(id)
-	return NextResponse.json({ message: 'Topic deleted' }, { status: 200 })
+	await Student.findByIdAndDelete(id)
+	return NextResponse.json({ message: 'Student deleted' }, { status: 200 })
 }

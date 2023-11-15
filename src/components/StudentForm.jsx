@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/navigation'
 import { Switch } from '@headlessui/react'
+import { ToastContainer, toast } from 'react-toastify'
 function classNames(...classes) {
 	return classes.filter(Boolean).join(' ')
 }
@@ -24,8 +25,22 @@ import Label from './Label'
 const schema = Yup.object().shape({
 	firstname: Yup.string().label('First Name').required().min(3).max(64),
 	lastname: Yup.string().label('First Name').trim().required().min(3).max(64),
-	email: Yup.string().label('email').trim().required().min(3).max(64),
-	phoneno: Yup.string().label('Phone number').trim().required().min(6).max(12),
+	email: Yup.string()
+		.label('email')
+		.email('Invalid email format')
+		.required()
+		.min(3)
+		.max(64),
+	phoneno: Yup.string()
+		.label('Phone number')
+		.trim()
+		.required()
+		.matches(
+			/^\([\d]{3}\) [\d]{10}/,
+			'Please enter a valid India phone number formated as (+91) 9702242036'
+		)
+		.min(6)
+		.max(12),
 	password: Yup.string().label('Password').trim().required().min(3).max(12),
 	gender: Yup.string().label('Gender').required(),
 	country: Yup.object()
@@ -45,7 +60,7 @@ const schema = Yup.object().shape({
 		.nullable() // for handling null value when clearing options via clicking "x"
 		.required('Cities is required '),
 	state: Yup.string().label('State').required().min(3).max(12),
-	pincode: Yup.string().label('Pincode').trim().required().min(3).max(12),
+	pincode: Yup.string().label('Pincode').required().min(6).max(6),
 	dateofbirth: Yup.string().label('Date of Birth').required().min(3).max(12),
 	job_location: Yup.string().label('Job Location').required().min(3).max(12),
 	education: Yup.string().label('Education').required(),
@@ -121,16 +136,14 @@ export default function StudentForm() {
 
 	const onSubmit = (data) => {
 		setLoading(true)
+
 		console.log(data, 'data')
 		if (!agreed) {
-			return 'Please check Privacy policy and Terms conditions'
+			setLoading(false)
+			return toast('Please check Privacy policy and Terms conditions')
 		}
 		var newData = { whatsup: mobileWhatsup }
 		Object.assign(data, newData)
-		console.log(data, 'data2')
-
-		// const JsonStudent = JSON.stringify(data)
-		// const StudentData
 		fetch('/api/student/', {
 			method: 'POST',
 			headers: {
@@ -140,8 +153,12 @@ export default function StudentForm() {
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data, 'student data')
-				// router.push('/')
+				if (data.message === 'success') {
+					toast('Student Register Successfully')
+					router.push('/')
+				} else {
+					toast(data.message)
+				}
 			})
 		setLoading(false)
 	}
@@ -232,30 +249,33 @@ export default function StudentForm() {
 								autoComplete="given-name"
 								className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 							/>
-							{errors.email?.type === 'required' && (
-								<p className="error">Email is required</p>
-							)}
+							<p className="error">
+								{errors.email?.message || errors.email?.label.message}
+							</p>
 						</div>
 					</div>
 
 					<div className="sm:col-span-1">
 						<Label label="Phone no" required />
-						<div className="relative mt-2.5">
-							<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-700 font-semibold ">
+						<div className=" mt-2.5  border rounded-md flex shadow-sm">
+							<span className="pointer-events-none  flex items-center pl-3 text-gray-700 font-semibold pr-4 bg-gray-300">
 								+91
-							</div>
+							</span>
 							<input
 								type="tel"
 								name="phoneno"
 								id="phoneno"
 								autoComplete="tel"
-								className="block w-full rounded-md border-0 px-3.5 py-2 pl-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+								className="block w-full  border-none px-3.5 py-2  text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-none sm:text-sm sm:leading-6"
 								{...register('phoneno')}
 							/>
-							{errors.phoneno?.type === 'required' && (
+							{/* {errors.phoneno?.type === 'required' && (
 								<p className="error">Phone no is required</p>
-							)}
+							)} */}
 						</div>
+						<p className="error">
+							{errors.phoneno?.message || errors.phoneno?.label.message}
+						</p>
 					</div>
 
 					<div className="sm:col-span-1">
@@ -394,9 +414,12 @@ export default function StudentForm() {
 							name="pincode"
 							className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 						/>
-						{errors.pincode?.type === 'required' && (
+						{/* {errors.pincode?.type === 'required' && (
 							<p className="error">Pincode is required</p>
-						)}
+						)} */}
+						<p className="error">
+							{errors.pincode?.message || errors.pincode?.label.message}
+						</p>
 					</div>
 
 					<div className="sm:col-span-1">
@@ -407,8 +430,8 @@ export default function StudentForm() {
 							name="dateofbirth"
 							className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 						/>
-						{errors.pincode?.type === 'required' && (
-							<p className="error">Pincode is required</p>
+						{errors.dateofbirth?.type === 'required' && (
+							<p className="error">date of birth is required</p>
 						)}
 					</div>
 
