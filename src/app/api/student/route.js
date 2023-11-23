@@ -29,20 +29,20 @@ export async function POST(request) {
 		upload_cv,
 	} = await request.json()
 	await connectMongoDB()
-	const findStudentEmail = await Student.findOne({ email: email })
-	const findStudentPhone = await Student.findOne({ phoneno: phoneno })
-	if (findStudentEmail) {
-		return NextResponse.json(
-			{ message: 'Email id  already exists' },
-			{ code: 201 }
-		)
-	}
-	if (findStudentPhone) {
-		return NextResponse.json(
-			{ message: 'Phone Number already exists' },
-			{ status: 201 }
-		)
-	}
+	// const findStudentEmail = await Student.findOne({ email: email })
+	// const findStudentPhone = await Student.findOne({ phoneno: phoneno })
+	// if (findStudentEmail) {
+	// 	return NextResponse.json(
+	// 		{ message: 'Email id  already exists' },
+	// 		{ code: 201 }
+	// 	)
+	// }
+	// if (findStudentPhone) {
+	// 	return NextResponse.json(
+	// 		{ message: 'Phone Number already exists' },
+	// 		{ status: 201 }
+	// 	)
+	// }
 	// console.log(findStudent, 'find')
 	await Student.create({
 		firstname,

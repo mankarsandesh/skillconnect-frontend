@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-
+import { toast } from 'react-toastify'
 export default function Example() {
 	const [data, setData] = useState(null)
 	const [isLoading, setLoading] = useState(true)
@@ -14,16 +14,19 @@ export default function Example() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		}).then((data) => {
-			console.log(data, 'sandesh')
 		})
+			.then((data) => {
+				return toast(data)
+			})
+			.then((data) => {
+				return toast(data)
+			})
 	}
 
 	useEffect(() => {
 		fetch('/api/student/')
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data, 'sandesh')
 				setData(data.StudentData)
 				setLoading(false)
 			})

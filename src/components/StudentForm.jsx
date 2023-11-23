@@ -31,16 +31,7 @@ const schema = Yup.object().shape({
 		.required()
 		.min(3)
 		.max(64),
-	phoneno: Yup.string()
-		.label('Phone number')
-		.trim()
-		.required()
-		.matches(
-			/^\([\d]{3}\) [\d]{10}/,
-			'Please enter a valid India phone number formated as (+91) 9702242036'
-		)
-		.min(6)
-		.max(12),
+	phoneno: Yup.string().label('Phone number').trim().required().min(8).max(10),
 	password: Yup.string().label('Password').trim().required().min(3).max(12),
 	gender: Yup.string().label('Gender').required(),
 	country: Yup.object()
